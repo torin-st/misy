@@ -16,6 +16,7 @@
 
     <modules>
         <module>misy-config-server</module>
+        <module>misy-discovery-server</module>
     </modules>
 
     <properties>
