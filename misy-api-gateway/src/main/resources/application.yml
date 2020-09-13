@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: departments-service
+          uri: lb://departments-service
+          predicates:
+            - Path=/api/department/**
+          filters:
+            - StripPrefix=2

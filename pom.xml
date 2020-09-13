@@ -18,6 +18,7 @@
         <module>misy-config-server</module>
         <module>misy-discovery-server</module>
         <module>misy-departments-service</module>
+        <module>misy-api-gateway</module>
     </modules>
 
     <properties>
