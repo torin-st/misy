@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+  config-server:
+    image: slyadz/misy-config-server
+    container_name: config-server
+    mem_limit: 512M
+    ports:
+    - 8888:8888
+
+  discovery-server:
+    image: slyadz/misy-discovery-server
+    container_name: discovery-server
+    mem_limit: 512M
+    depends_on:
+      - config-server
+    entrypoint: [ "./dockerize","-wait=tcp://config-server:8888","-timeout=60s","--","java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
+    ports:
+    - 8761:8761
+
+  departments-service:
+    image: slyadz/misy-departments-service
+    container_name: departments-service
+    mem_limit: 512M
+    depends_on:
+      - config-server
+      - discovery-server
+    entrypoint: [ "./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
+    ports:
+    - 8081:8081
+
+  api-gateway:
+    image: slyadz/misy-api-gateway
+    container_name: api-gateway
+    mem_limit: 512M
+    depends_on:
+      - config-server
+      - discovery-server
+    entrypoint: [ "./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
+    ports:
+    - 8080:8080
