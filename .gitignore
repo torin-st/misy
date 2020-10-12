@@ -29,4 +29,7 @@ hs_err_pid*
 # Output files
 target/
 
+# Description files
+_description/
+
 
